@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
  
 class Flow(models.Model):
  
-    process_id = models.CharField(max_length=50)
+    process_id = models.CharField(primary_key=True, max_length=50)
     module = models.CharField(max_length=50)
     organization = models.CharField(max_length=50)
     description = models.TextField(blank=True)
@@ -15,7 +15,6 @@ class Flow(models.Model):
     class Meta:       
         verbose_name='Flow'
         verbose_name_plural='Flows'
-        unique_together = ('process_id', 'module', 'organization')
    
     def __str__(self):
         return f'{self.process_id} - {self.module} - {self.organization}'
@@ -24,7 +23,7 @@ class Flow(models.Model):
 class Notification(models.Model):
  
     flow = models.ForeignKey(Flow, on_delete=models.CASCADE)
-    transaction_id = models.CharField(max_length=50)
+    transaction_id = models.CharField(primary_key=True, max_length=50)
     typeNotification = models.CharField(max_length=50)
     state = models.BooleanField(default=True)
     reprocessable = models.BooleanField(default=False)
@@ -44,7 +43,7 @@ class OriginConnection(models.Model):
     typeOriginConnection = models.CharField(max_length=50)
     protocol = models.CharField(max_length=50)
     url = models.URLField()
-    origin_id = models.CharField(max_length=50)
+    origin_id = models.CharField(primary_key=True, max_length=50)
 
     class Meta:       
         verbose_name='Origin Connection'
@@ -60,7 +59,7 @@ class DestinyConnection(models.Model):
     typeDestinyConnection = models.CharField(max_length=50)
     protocol = models.CharField(max_length=50)
     url = models.URLField()
-    destiny_id = models.CharField(max_length=50)
+    destiny_id = models.CharField(primary_key=True, max_length=50)
 #    ociiD_objectStorage =
 #    ociiD_file =
    
