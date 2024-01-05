@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from flow.models import Flow, Notification
-from flow.forms import FlowForm, NotificationForm
+from flow.forms import FlowForm, NotificationForm, NotificationFormEdit
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
@@ -18,9 +18,21 @@ def showFlow(request, process_id):
 
     single_flow = get_object_or_404(Flow.objects.filter(id=process_id, owner = request.user))
 
+    context = {}
+
+    notifications = (Notification.objects.filter(flow=single_flow.id))
+
+    if notifications:
+        context = {
+            "flow" : single_flow,
+            "notification" : notifications
+        }
+        return render(request, 'flow.html', context)
+
     context = {
-        "flow" : single_flow
-    }
+            "flow" : single_flow,
+            "notification" : []
+        }
     
     return render(request, 'flow.html', context)
 
@@ -28,7 +40,7 @@ def addFlow(request):
     form_action = reverse('flow:addFlow')
     if request.method == 'POST':
         form = FlowForm(request.POST)
-        context = {'form': form, 'form_action': form_action}
+        context = {'name': "Flow", 'form': form, 'form_action': form_action}
 
         if form.is_valid():
             new_flow = form.save(commit=False)
@@ -39,7 +51,7 @@ def addFlow(request):
         
         return render(request, 'create.html', context)
     
-    context = {'form': FlowForm()}
+    context = {'name': "Flow", 'form': FlowForm()}
     return render(request, 'create.html', context)
 
 def editFlow(request, process_id):
@@ -48,7 +60,7 @@ def editFlow(request, process_id):
     if request.method == 'POST':
         form = FlowForm(request.POST, instance=flow)
 
-        context = {'form': form, 'form_action': form_action}
+        context = {'name': "Flow", 'form': form, 'form_action': form_action}
 
         if form.is_valid():
             edit_flow = form.save()
@@ -57,6 +69,7 @@ def editFlow(request, process_id):
         return render(request, 'create.html', context)
     
     context = {
+        'name': "Flow",
         'form': FlowForm(instance=flow),
         'form_action': form_action
     }
@@ -74,36 +87,41 @@ def showNotif(request, transaction_id):
     return render(request, 'notification.html', context)
 
 def addNotif(request):
-    form_action = reverse('flow:create')
+    form_action = reverse('flow:addNotif')
     if request.method == 'POST':
         form = NotificationForm(request.POST)
-        context = {'form': form, 'form_action': form_action}
+        context = {'name': "Transaction", 'form': form, 'form_action': form_action}
 
         if form.is_valid():
-            new_notif = form.save(commit=False)
-            new_notif.owner = request.user
-            new_notif.save()
+            new_notification = form.save(commit=False)
+            new_notification.owner = request.user
+            new_notification.save()
             
-            return redirect('flow:index', transaction_id = new_notif.transaction_id)
+            return redirect('flow:index')
         
-        return render(request, 'flow/create.html', context)
+        return render(request, 'create.html', context)
+    
+    context = {'name': "Transaction", 'form': NotificationForm()}
+    return render(request, 'create.html', context)
 
-def editNotif(request, transaction_id):
-    notif = get_object_or_404(Notification, pk=transaction_id, owner=request.user)
-    form_action = reverse('flow:editNotif', args=(transaction_id,))
+def editNotif(request, notification_id):
+    notif = get_object_or_404(Notification, pk=notification_id)
+    form_action = reverse('flow:editNotif', args=(notification_id,))
     if request.method == 'POST':
-        form = NotificationForm(request.POST, instance=notif)
+        form = NotificationFormEdit(request.POST, instance=notif)
 
-        context = {'form': form, 'form_action': form_action}
+        context = {'name': "Notification", 'form': form, 'form_action': form_action}
 
         if form.is_valid():
             edit_notif = form.save()
-            return redirect('flow:editNotif', process_id=edit_notif.id)
+            single_flow = Flow.objects.filter(pk=notif.flow.id).first()
+            return redirect('flow:showFlow', process_id=single_flow.id)
         
         return render(request, 'create.html', context)
     
     context = {
-        'form': NotificationForm(instance=notif),
+        'name': "Notification",
+        'form': NotificationFormEdit(instance=notif),
         'form_action': form_action
     }
 
