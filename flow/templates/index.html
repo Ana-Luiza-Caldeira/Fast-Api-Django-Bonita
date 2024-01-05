@@ -1,14 +1,9 @@
-<!doctype html>
-<html>
-<head>
-<title>Our Funky HTML Page</title>
-<meta name="description" content="Our first page">
-<meta name="keywords" content="html tutorial template">
-</head>
-<body>
     <div>
         <a href="{% url 'flow:addFlow' %}" class="table-link">
-            +
+            + CREATE FLOW |
+        </a>
+        <a href="{% url 'flow:addNotif' %}" class="table-link">
+            | + CREATE TRANSACTION
         </a>
         <table>
             <caption>
@@ -46,14 +41,12 @@
                             <a href="{% url 'flow:editFlow' flow.id %}" class="table-link">
                                 EDIT |
                             </a>
-                            <a href="{% url 'flow:editFlow' flow.id %}" class="table-link">
+                            <!-- <a href="{% url 'flow:editFlow' flow.id %}" class="table-link">
                                 | ADD TRANSACTION
-                            </a>
+                            </a> -->
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         {{ flow.created_date }}
-</body>
-</html>

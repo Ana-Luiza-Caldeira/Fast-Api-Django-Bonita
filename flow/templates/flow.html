@@ -13,4 +13,16 @@
     </p>
     <p><b>Owner:</b> {{ flow.owner }}</p>
     <p><b>Created Date:</b> {{ flow.created_date }}</p>
+    {% if notification %}
+        <h2>
+            Transaction:
+        </h2>
+        {% for noti in notification %}
+            <a href="{% url 'flow:editNotif' noti.id %}" class="table-link">
+                <p>{{noti.id}}</p>
+            </a>
+            <p>{{noti.typeNotification}}</p>
+            <p>--------------------</p>
+        {% endfor %}
+    {% endif %}
 </div>
