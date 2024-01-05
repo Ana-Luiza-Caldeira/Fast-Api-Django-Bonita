@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from flow.models import Flow, Notification
+from flow.forms import FlowForm, NotificationForm
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     # all_flows = Flow.objects.filter(owner = request.user)
@@ -22,16 +25,58 @@ def showFlow(request, process_id):
     return render(request, 'flow.html', context)
 
 def addFlow(request):
-    pass
+    form_action = reverse('flow:create')
+    if request.method == 'POST':
+        form = FlowForm(request.POST)
+        context = {'form': form, 'form_action': form_action}
 
-def editFlow(request):
-    pass
+        if form.is_valid():
+            new_flow = form.save(commit=False)
+            new_flow.owner = request.user
+            new_flow.save()
+            
+            return redirect('flow:index', process_id = new_flow.process_id)
+        
+        return render(request, 'flow/create.html', context)
+
+def editFlow(request, process_id):
+    flow = get_object_or_404(Flow, pk=process_id, show=True, owner=request.user)
+    form_action = reverse('flow:edit', args=(process_id))
+    if request.method == 'POST':
+        form = FlowForm(request.POST, instance=flow)
+
+        context = {'form': form, 'form_action': form_action}
+
+        if form.is_valid():
+            edit_flow = form.save()
+            return render('flow:edit', process_id=edit_flow.pk)
+        
+        return render(request, 'flow/create.html', context)
+    
+    context = {
+        'form': FlowForm(instance=flow),
+        'form_action': form_action
+    }
+
+    return render(request, 'flow/create.html', context)
 
 def showNotif(request):
     pass
 
 def addNotif(request):
-    pass
+    form_action = reverse('flow:create')
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        context = {'form': form, 'form_action': form_action}
+
+        if form.is_valid():
+            new_notif = form.save(commit=False)
+            new_notif.owner = request.user
+            new_notif.save()
+            
+            return redirect('flow:index', transaction_id = new_notif.transaction_id)
+        
+        return render(request, 'flow/create.html', context)
 
 def editNotif(request):
     pass
