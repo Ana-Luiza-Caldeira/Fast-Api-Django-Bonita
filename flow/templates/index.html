@@ -6,6 +6,43 @@
 <meta name="keywords" content="html tutorial template">
 </head>
 <body>
-Content goes here.
+    <div>
+        <table>
+            <caption>
+                Flows
+            </caption>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Module</th>
+                    <th>Organization</th>
+                    <th>State</th>
+                    <th>Owner</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for flow in flows %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'flow:showFlow' flow.process_id %}" class="table-link">
+                                {{flow.process_id}}
+                            </a>
+                        </td>
+                        <td>{{flow.module}}</td>
+                        <td>{{flow.organization}}</td>
+                        <td>
+                            {% if flow.state == True %}
+                                Ativo
+                            {% else %}
+                                Inativo
+                            {% endif %}
+                        </td>
+                        <td>{{flow.owner}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {{ flow.created_date }}
 </body>
 </html>

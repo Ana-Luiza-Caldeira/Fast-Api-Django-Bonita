@@ -11,6 +11,7 @@ class Flow(models.Model):
     description = models.TextField(blank=True)
     state = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    created_date = models.DateTimeField(default=timezone.now)
  
     class Meta:       
         verbose_name='Flow'
@@ -28,6 +29,7 @@ class Notification(models.Model):
     state = models.BooleanField(default=True)
     reprocessable = models.BooleanField(default=False)
     manageable = models.BooleanField(default=False)
+    created_date = models.DateTimeField(default=timezone.now)
  
     class Meta:       
         verbose_name='Notification'
