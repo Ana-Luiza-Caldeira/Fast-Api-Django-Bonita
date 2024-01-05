@@ -4,8 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
  
 class Flow(models.Model):
- 
-    process_id = models.CharField(primary_key=True, max_length=50)
+    # process_id = models.CharField(max_length=50) pode editar ou nao?
     module = models.CharField(max_length=50)
     organization = models.CharField(max_length=50)
     description = models.TextField(blank=True)
@@ -18,13 +17,12 @@ class Flow(models.Model):
         verbose_name_plural='Flows'
    
     def __str__(self):
-        return f'{self.process_id} - {self.module} - {self.organization}'
+        return f'{self.id} - {self.module} - {self.organization}'
  
  
 class Notification(models.Model):
- 
     flow = models.ForeignKey(Flow, on_delete=models.CASCADE)
-    transaction_id = models.CharField(primary_key=True, max_length=50)
+    transaction_id = models.CharField(max_length=50)
     typeNotification = models.CharField(max_length=50)
     state = models.BooleanField(default=True)
     reprocessable = models.BooleanField(default=False)

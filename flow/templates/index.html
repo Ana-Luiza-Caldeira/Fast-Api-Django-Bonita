@@ -7,6 +7,9 @@
 </head>
 <body>
     <div>
+        <a href="{% url 'flow:addFlow' %}" class="table-link">
+            +
+        </a>
         <table>
             <caption>
                 Flows
@@ -25,8 +28,8 @@
                 {% for flow in flows %}
                     <tr>
                         <td>
-                            <a href="{% url 'flow:showFlow' flow.process_id %}" class="table-link">
-                                {{flow.process_id}}
+                            <a href="{% url 'flow:showFlow' flow.id %}" class="table-link">
+                                {{flow.id}}
                             </a>
                         </td>
                         <td>{{flow.module}}</td>
@@ -39,6 +42,14 @@
                             {% endif %}
                         </td>
                         <td>{{flow.owner}}</td>
+                        <td>
+                            <a href="{% url 'flow:editFlow' flow.id %}" class="table-link">
+                                EDIT |
+                            </a>
+                            <a href="{% url 'flow:editFlow' flow.id %}" class="table-link">
+                                | ADD TRANSACTION
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
