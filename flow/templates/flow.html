@@ -1,0 +1,16 @@
+<div>
+    <h1>
+        {{ flow.module }} - {{ flow.organization }}
+    </h1>
+    <p><b>ID:</b> {{ flow.process_id }}</p>
+    <p><b>Description:</b> {{ flow.description }}</p>
+    <p><b>State:</b>
+        {% if flow.state == True %}
+            Ativo
+        {% else %}
+            Inativo
+        {% endif %}
+    </p>
+    <p><b>Owner:</b> {{ flow.owner }}</p>
+    <p><b>Created Date:</b> {{ flow.created_date }}</p>
+</div>

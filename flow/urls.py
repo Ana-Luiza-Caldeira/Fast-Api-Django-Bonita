@@ -4,5 +4,6 @@ from flow import views
 app_name = 'flow'
 
 urlpatterns = [
-    # path('', views.Index.showIndex, name="index"),
+    path('', views.index, name="index"),
+    path('flow/<int:process_id>/detail/', views.showFlow, name="showFlow"),
 ]
