@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from flow.models import Flow, Notification
+from flow.models import Flow, Notification, OriginConnection, DestinyConnection
 from flow.forms import FlowForm, NotificationForm, NotificationFormEdit
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
@@ -79,9 +79,13 @@ def editFlow(request, process_id):
 
 def showNotif(request, notification_id):
     single_notif = get_object_or_404(Notification.objects.filter(id=notification_id))
+    singleOrCon = OriginConnection.objects.filter(notification=single_notif).first()
+    singleDesCon = DestinyConnection.objects.filter(notification=single_notif).first()
 
     context = {
-        "notif" : single_notif
+        "notif" : single_notif,
+        "origen_con": singleOrCon,       
+        "destiny_con": singleDesCon,
     }
     
     return render(request, 'transaction.html', context)
