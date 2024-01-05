@@ -1,0 +1,33 @@
+    <div>
+
+        <h2>Flow</h2>
+
+        <form 
+        action="{{ form_action }}"
+        method="POST"
+        enctype="multipart/form-data"
+        >
+        {% csrf_token %}
+        <div>
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+
+                {% if field.help_text %}
+                    <p >{{ field.help_text }}</p>
+                {% endif %}
+                
+            </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <div>
+            <button class="btn" type="submit">Send</button>
+            </div>
+        </div>
+
+        </form>
+    </div>
