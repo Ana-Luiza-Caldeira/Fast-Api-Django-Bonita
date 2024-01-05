@@ -83,7 +83,6 @@ def showNotif(request, notification_id):
     singleDesCon = DestinyConnection.objects.filter(notification=single_notif).first()
 
     context = {
-        "notif" : single_notif,
         "origen_con": singleOrCon,       
         "destiny_con": singleDesCon,
     }
@@ -101,16 +100,16 @@ def addNotif(request):
             new_notification.owner = request.user
             new_notification.save()
             
-            return redirect('flow:index')
+            return redirect('flow:index', transaction_id=new_notification.transaction_id)
         
         return render(request, 'create.html', context)
     
     context = {'name': "Transaction", 'form': NotificationForm()}
     return render(request, 'create.html', context)
 
-def editNotif(request, notification_id):
-    notif = get_object_or_404(Notification, pk=notification_id)
-    form_action = reverse('flow:editNotif', args=(notification_id,))
+def editNotif(request, transaction_id):
+    notif = get_object_or_404(Notification, pk=transaction_id, owner=request.user)
+    form_action = reverse('flow:editNotif', args=(transaction_id,))
     if request.method == 'POST':
         form = NotificationFormEdit(request.POST, instance=notif)
 
@@ -130,3 +129,10 @@ def editNotif(request, notification_id):
     }
 
     return render(request, 'create.html', context)
+
+
+def originCon(request):
+    pass
+
+def destinyCon(request):
+    pass
