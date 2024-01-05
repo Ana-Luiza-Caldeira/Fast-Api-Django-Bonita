@@ -18,10 +18,13 @@
             Transaction:
         </h2>
         {% for noti in notification %}
-            <a href="{% url 'flow:editNotif' noti.id %}" class="table-link">
+            <a href="{% url 'flow:showNotif' noti.id %}" class="table-link">
                 <p>{{noti.id}}</p>
             </a>
             <p>{{noti.typeNotification}}</p>
+            <a href="{% url 'flow:editNotif' noti.id %}" class="table-link">
+                <p>EDIT TRANSACTION</p>
+            </a>
             <p>--------------------</p>
         {% endfor %}
     {% endif %}

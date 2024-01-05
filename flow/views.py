@@ -64,7 +64,8 @@ def editFlow(request, process_id):
 
         if form.is_valid():
             edit_flow = form.save()
-            return redirect('flow:editFlow', process_id=edit_flow.id)
+            return redirect('flow:index')
+            # return redirect('flow:editFlow', process_id=edit_flow.id)
         
         return render(request, 'create.html', context)
     
@@ -76,15 +77,14 @@ def editFlow(request, process_id):
 
     return render(request, 'create.html', context)
 
-def showNotif(request, transaction_id):
-    
-    single_notif = get_object_or_404(Notification.objects.filter(id=transaction_id, owner = request.user))
+def showNotif(request, notification_id):
+    single_notif = get_object_or_404(Notification.objects.filter(id=notification_id))
 
     context = {
         "notif" : single_notif
     }
     
-    return render(request, 'notification.html', context)
+    return render(request, 'transaction.html', context)
 
 def addNotif(request):
     form_action = reverse('flow:addNotif')
