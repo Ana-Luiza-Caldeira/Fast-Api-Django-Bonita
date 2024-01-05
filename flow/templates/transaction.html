@@ -14,4 +14,18 @@
     <p><b>Reprocessable:</b> {{ notif.reprocessable }}</p>
     <p><b>Manageable:</b> {{ notif.manageable }}</p>
     <p><b>Created Date:</b> {{ notif.created_date }}</p>
+    {% if origen_con %}
+        --------------------
+        <p><b>Origin id:</b> {{ origen_con.origin_id }}</p>
+        <p><b>Origin Connection:</b> {{ origen_con.typeOriginConnection }}</p>
+        <p><b>Protocol:</b> {{ origen_con.protocol }}</p>
+        <p><b>Url:</b> {{ origen_con.url }}</p>
+        --------------------
+    {% endif %}
+    {% if destiny_con %}
+        <p><b>Destiny Id:</b> {{ destiny_con.destiny_id }}</p>
+        <p><b>Destiny Connection:</b> {{ destiny_con.typeDestinyConnection }}</p>
+        <p><b>Protocol:</b> {{ destiny_con.protocol }}</p>
+        <p><b>Url:</b> {{ destiny_con.url }}</p>
+    {% endif %}
 </div>
