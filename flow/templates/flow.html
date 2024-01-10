@@ -2,7 +2,7 @@
     <h1>
         {{ flow.module }} - {{ flow.organization }}
     </h1>
-    <p><b>ID:</b> {{ flow.id }}</p>
+    <p><b>ID:</b> {{ flow.process_id }}</p>
     <p><b>Description:</b> {{ flow.description }}</p>
     <p><b>State:</b>
         {% if flow.state == True %}
@@ -18,11 +18,11 @@
             Transaction:
         </h2>
         {% for noti in notification %}
-            <a href="{% url 'flow:showNotif' noti.id %}" class="table-link">
-                <p>{{noti.id}}</p>
+            <a href="{% url 'flow:showNotif' noti.transaction_id %}" class="table-link">
+                <p>{{noti.transaction_id}}</p>
             </a>
             <p>{{noti.typeNotification}}</p>
-            <a href="{% url 'flow:editNotif' noti.id %}" class="table-link">
+            <a href="{% url 'flow:editNotif' noti.transaction_id %}" class="table-link">
                 <p>EDIT TRANSACTION</p>
             </a>
             <p>--------------------</p>
