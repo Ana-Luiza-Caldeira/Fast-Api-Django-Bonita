@@ -103,7 +103,6 @@ def showNotif(request, notification_id):
     singleDesCon = DestinyConnection.objects.filter(notification=single_notif).first()
 
     context = {
-        "notif" : single_notif,
         "origen_con": singleOrCon,       
         "destiny_con": singleDesCon,
     }
@@ -150,3 +149,10 @@ def editNotif(request, notification_id):
     }
 
     return render(request, 'create.html', context)
+
+
+def originCon(request):
+    pass
+
+def destinyCon(request):
+    pass
