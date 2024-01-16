@@ -11,6 +11,6 @@ urlpatterns = [
     path('flow/<int:process_id>/update/', views.editFlow, name="editFlow"),
 
     path('notification/<int:notification_id>/detail/', views.showNotif, name="showNotif"),
-    # path('notification/create/', views.addNotif, name="addNotif"),
+    path('notification/create/', views.addNotif, name="addNotif"),
     path('notification/<int:notification_id>/update/', views.editNotif, name="editNotif"),
 ]

@@ -9,7 +9,7 @@ class FlowForm(forms.ModelForm):
 class NotificationForm(forms.ModelForm):
     class Meta:
         model = Notification
-        fields = ['flow', 'typeNotification', 'state', 'reprocessable', 'manageable']
+        fields = ['transaction_id','flow', 'typeNotification', 'state', 'reprocessable', 'manageable']
 
 class FlowFormEdit(forms.ModelForm):
     class Meta:

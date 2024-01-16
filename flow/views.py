@@ -4,7 +4,10 @@ from flow.models import Flow, Notification, OriginConnection, DestinyConnection
 from flow.forms import FlowForm, FlowFormEdit, NotificationForm, NotificationFormEdit
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+import requests
+from requests.auth import HTTPBasicAuth
+from elasticsearch import Elasticsearch
+from elasticsearch.exceptions import NotFoundError
 
 def index(request):
     all_flows = Flow.objects.filter(owner = request.user)
@@ -35,7 +38,6 @@ def search(request): #NAO ESTÁ FEITA
     return render(request, 'contact/index.html', context)
 
 def showFlow(request, process_id):
-
     single_flow = get_object_or_404(Flow.objects.filter(process_id=process_id, owner = request.user))
 
     context = {}
@@ -109,23 +111,36 @@ def showNotif(request, notification_id):
     
     return render(request, 'transaction.html', context)
 
-# def addNotif(request):
-#     form_action = reverse('flow:addNotif')
-#     if request.method == 'POST':
-#         form = NotificationForm(request.POST)
-#         context = {'name': "Transaction", 'form': form, 'form_action': form_action}
+def addNotif(request):
+    form_action = reverse('flow:addNotif')
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        context = {'name': "Transaction", 'form': form, 'form_action': form_action}
 
-#         if form.is_valid():
-#             new_notification = form.save(commit=False)
-#             new_notification.owner = request.user
-#             new_notification.save()
-            
-#             return redirect('flow:index')
-        
-#         return render(request, 'create.html', context)
-    
-#     context = {'name': "Transaction", 'form': NotificationForm()}
-#     return render(request, 'create.html', context)
+        if form.is_valid():
+            new_notification = form.save(commit=False)
+            new_notification.owner = request.user
+            new_notification.save()
+ 
+            transaction = request.POST.get('transaction_id')
+ 
+            url = f'https://192.168.10.68:9200/{transaction}'
+
+            basic = HTTPBasicAuth('admin','admin')
+ 
+            response = requests.put(url, auth=basic, verify=False)
+
+            if response.status_code == 200:
+                print("deu certo")
+                return redirect('flow:index')
+           
+            else:
+                print("deu erro")
+                pass
+        return render(request, 'create.html', context)
+   
+    context = {'name': "Transaction", 'form': NotificationForm()}
+    return render(request, 'create.html', context)
 
 def editNotif(request, notification_id):
     notif = get_object_or_404(Notification, transaction_id=notification_id)
