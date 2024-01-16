@@ -1,8 +1,7 @@
 from django.db import models
-from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
- 
+
 class Flow(models.Model):
     process_id = models.CharField(primary_key=True, max_length=50)
     module = models.CharField(max_length=50)
@@ -18,11 +17,10 @@ class Flow(models.Model):
    
     def __str__(self):
         return f'{self.process_id} - {self.module} - {self.organization}'
- 
- 
+    
 class Notification(models.Model):
-    flow = models.ForeignKey(Flow, on_delete=models.CASCADE)
     transaction_id = models.CharField(primary_key=True, max_length=50)
+    flow = models.ForeignKey(Flow, on_delete=models.CASCADE)
     typeNotification = models.CharField(max_length=50)
     state = models.BooleanField(default=True)
     reprocessable = models.BooleanField(default=False)
@@ -35,15 +33,13 @@ class Notification(models.Model):
  
     def __str__(self):
         return f'{self.flow} - {self.transaction_id}'
- 
- 
+    
 class OriginConnection(models.Model):
- 
+    origin_id = models.CharField(primary_key=True, max_length=50)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     typeOriginConnection = models.CharField(max_length=50)
     protocol = models.CharField(max_length=50)
     url = models.URLField()
-    origin_id = models.CharField(primary_key=True, max_length=50)
 
     class Meta:       
         verbose_name='Origin Connection'
@@ -51,15 +47,13 @@ class OriginConnection(models.Model):
  
     def __str__(self):
         return f'{self.notification} - {self.typeOriginConnection}'
-   
- 
+    
 class DestinyConnection(models.Model):
- 
+    destiny_id = models.CharField(primary_key=True, max_length=50)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     typeDestinyConnection = models.CharField(max_length=50)
     protocol = models.CharField(max_length=50)
     url = models.URLField()
-    destiny_id = models.CharField(primary_key=True, max_length=50)
 #    ociiD_objectStorage =
 #    ociiD_file =
    
@@ -69,10 +63,9 @@ class DestinyConnection(models.Model):
 
     def __str__(self):
         return f'{self.notification} - {self.typeDestinyConnection}'
- 
- 
+
 class Data(models.Model):
- 
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
  
     class Meta:       
@@ -81,10 +74,8 @@ class Data(models.Model):
 
     def __str__(self):
         return self.name
- 
- 
+    
 class Field(models.Model):
-
     data = models.ForeignKey(Data, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     typeField = models.CharField(max_length=50)
@@ -97,10 +88,8 @@ class Field(models.Model):
  
     def __str__(self):
         return f'{self.name} - {self.typeField}'
-   
- 
+
 class Rule(models.Model):
- 
     field = models.ForeignKey(Field, on_delete=models.CASCADE)
     typeRules = models.CharField(max_length=50)
     description = models.TextField
